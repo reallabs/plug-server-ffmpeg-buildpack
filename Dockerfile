@@ -1,3 +1,4 @@
+# This needs to match the ubuntu version in the heroku stack
 FROM ubuntu:20.04
 
 # Update package manager
