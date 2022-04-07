@@ -1,0 +1,24 @@
+#!/bin/sh
+
+indent() {
+  sed -u 's/^/       /'
+}
+
+echo "-----> Install jetfuel-compiled-ffmpeg"
+BUILD_DIR=$1
+FFMPEG_DIR="ffmpeg_bin"
+DOWNLOAD_URL="https://storage.googleapis.com/theplug-server-public/ffmpeg-bin.tar.gz"
+
+echo "DOWNLOAD_URL = " $DOWNLOAD_URL | indent
+
+cd $BUILD_DIR
+mkdir -p $FFMPEG_DIR
+cd $FFMPEG_DIR
+curl -L --silent $DOWNLOAD_URL | tar xz
+
+echo "exporting PATH" | indent
+PROFILE_PATH="$BUILD_DIR/.profile.d/ffmpeg.sh"
+mkdir -p $(dirname $PROFILE_PATH)
+FIRST_HALF='export PATH="$PATH'
+echo "$FIRST_HALF:$FFMPEG_DIR/" >> $PROFILE_PATH
+
