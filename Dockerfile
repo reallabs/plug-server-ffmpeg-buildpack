@@ -36,8 +36,8 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get --assume-yes install \
 # Create working directories
 RUN mkdir -p ~/ffmpeg_sources ~/bin
 
-# Install dependency for libx264
-RUN apt-get --assume-yes install libx264-dev
+# Install dependency for libx264 and libx265
+RUN apt-get --assume-yes install libx264-dev libx265-dev libnuma-dev
 
 # Configure and compile app
 RUN cd ~/ffmpeg_sources && \
@@ -55,6 +55,7 @@ RUN cd ~/ffmpeg_sources && \
     --enable-small \
     --enable-gpl \
     --enable-libx264 \
+    --enable-libx265 \
     --enable-nonfree && \
     PATH="$HOME/bin:$PATH" make && \
     make install && \
@@ -62,3 +63,7 @@ RUN cd ~/ffmpeg_sources && \
 
 # Test if installation was succesful
 RUN ~/bin/ffmpeg -version
+
+# Create compressed binaries
+RUN cd ~/bin && tar -czvf ../ffmpeg-bin.tar.gz *
+
